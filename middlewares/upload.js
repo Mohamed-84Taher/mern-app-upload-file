@@ -8,7 +8,20 @@ const storage=multer.diskStorage({
     }
 })
 const upload=multer({
-    storage:storage
+    storage:storage,
+    limits:{fileSize:1000000},
+    fileFilter:function(req,file,cb){
+        const fileTypes=/jpeg|jpg|png|gif/;
+
+        const extname=fileTypes.test(path.extname(file.originalname).toLowerCase())
+        const mimeType=fileTypes.test(file.mimetype)
+
+        if(extname&&mimeType){
+            return cb(null,true)
+        }else{
+            cb('Error:Images only');
+        }
+    }
 })
 
 module.exports=upload
